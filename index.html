@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Chatbot by Techserverglobal</title>
+</head>
+<body>
+    <h1>Custom Chatbot by Techserverglobal</h1>
+    <form id="chat-form">
+        <label for="message">Your Message:</label><br><br>
+        <input type="text" id="message" name="message" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <h2>Response:</h2>
+    <div id="response"></div>
+
+    <script>
+        // Add event listener to the form
+        document.getElementById('chat-form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent page reload
+
+            const message = document.getElementById('message').value;
+            const responseDiv = document.getElementById('response');
+
+            // Send a POST request using Fetch API
+            try {
+                const response = await fetch('http://127.0.0.1:5000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+
+                // Display the chatbot's response
+                if (response.ok) {
+                    responseDiv.textContent = `Bot: ${data.response}`;
+                } else {
+                    responseDiv.textContent = `Error: ${data.error}`;
+                }
+            } catch (error) {
+                responseDiv.textContent = `Error: ${error}`;
+            }
+        });
+    </script>
+</body>
+</html>
+
